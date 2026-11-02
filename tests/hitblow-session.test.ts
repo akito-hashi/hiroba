@@ -67,6 +67,20 @@ describe('HbSession', () => {
     expect(p.b.view().myTurn).toBe(true);
   });
 
+  test('相手の推測と、こちらが返した判定も見られる', async () => {
+    const p = await ready();
+    expect(p.b.view().oppHistory).toEqual([]);
+    p.a.guess([5, 3, 3, 0]);
+    await p.flush();
+    // b の正解 [5,4,3,3] に対する a の推測
+    expect(p.b.view().oppHistory).toEqual([{ guess: [5, 3, 3, 0], result: { hit: 2, blow: 1 } }]);
+    // a の側でも、自分の推測は myHistory、相手（b）の推測は oppHistory
+    expect(p.a.view().oppHistory).toEqual([]);
+    p.b.guess([0, 1, 0, 2]);
+    await p.flush();
+    expect(p.a.view().oppHistory).toEqual([{ guess: [0, 1, 0, 2], result: { hit: 2, blow: 2 } }]);
+  });
+
   test('正解は相手に送らず、封印値だけを送る（決着まで）', async () => {
     const p = await ready();
     p.a.guess([1, 1, 1, 1]);

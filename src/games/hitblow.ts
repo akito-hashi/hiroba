@@ -30,6 +30,7 @@ function ballsRow(code: Code, className = 'row') {
 
 function historyList(entries: { guess: Code; result: { hit: number; blow: number } }[]) {
   const list = el('div', 'history');
+  if (entries.length === 0) list.append(el('div', 'sub empty-history', 'まだありません'));
   entries.forEach((e, i) => {
     const row = el('div', 'row');
     // 結果はピンで見せる: ヒットはピンク、ブローは白、外れは空き
@@ -147,6 +148,29 @@ function mount(ctx: GameContext): GameInstance {
     });
   }
 
+  // 自分の推測と相手の推測を横に並べる。今の番の側を光らせる
+  function boards(v: ReturnType<HbSession['view']>) {
+    const playing = v.phase === 'playing';
+    const mine = el('section', `hb-board${playing && (v.myTurn || v.waitingResult) ? ' active' : ''}`);
+    mine.append(
+      el('h3', '', 'あなたの推測'),
+      el('div', 'sub', `${opp}の正解を当てる（${v.myHistory.length} / ${MAX_TURNS}）`),
+      historyList(v.myHistory),
+    );
+    const theirs = el('section', `hb-board${playing && !v.myTurn && !v.waitingResult ? ' active' : ''}`);
+    const target = el('div', 'hb-target');
+    target.append(el('span', 'sub', 'あなたの正解'), ballsRow(v.mySecret ?? [], 'row small'));
+    theirs.append(
+      el('h3', '', `${opp}の推測`),
+      el('div', 'sub', `あなたの正解を当てに来る（${v.oppHistory.length} / ${MAX_TURNS}）`),
+      target,
+      historyList(v.oppHistory),
+    );
+    const wrap = el('div', 'hb-boards');
+    wrap.append(mine, theirs);
+    return wrap;
+  }
+
   function render() {
     if (disposed) return;
     const v = session.view();
@@ -163,21 +187,20 @@ function mount(ctx: GameContext): GameInstance {
       case 'playing': {
         const turn = v.myHistory.length + (v.myTurn ? 1 : 0);
         const status = v.myTurn ? `あなたの番です（${turn} / ${MAX_TURNS}）` : v.waitingResult ? '判定を待っています…' : `${opp}の番です`;
-        nodes.push(el('div', 'sub', `${opp}：${v.oppTurns} / ${MAX_TURNS} ターン`));
-        nodes.push(historyList(v.myHistory));
+        nodes.push(boards(v));
         nodes.push(composer('決定', v.myTurn, (c) => session.guess(c)));
         showMessage(status, nodes);
         return;
       }
       case 'revealing':
-        showMessage(`${opp}の正解を確かめています…`, [historyList(v.myHistory)]);
+        showMessage(`${opp}の正解を確かめています…`, [boards(v)]);
         return;
       case 'ended': {
         const text = v.outcome ? outcomeText(v.outcome, me, vsCpu) : `${opp}が切断しました`;
         nodes.push(el('div', 'sub', 'あなたの正解'), ballsRow(v.mySecret ?? []));
         if (v.oppSecret) nodes.push(el('div', 'sub', `${opp}の正解`), ballsRow(v.oppSecret));
         else if (v.outcome && v.outcome.reason !== 'disconnect') nodes.push(el('div', 'sub', `${opp}の正解は確かめられませんでした`));
-        nodes.push(historyList(v.myHistory));
+        nodes.push(boards(v));
         // ネット対戦のもう一度は、部屋を作った人が選択画面から選び直す
         if (vsCpu) nodes.push(button('もう一度', start));
         nodes.push(button('戻る', ctx.onBack));

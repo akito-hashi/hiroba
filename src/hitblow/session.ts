@@ -10,6 +10,8 @@ export type HbView = {
   myTurn: boolean;
   waitingResult: boolean;
   myHistory: Entry[];
+  // 相手の推測と、こちらが返した判定（自分の正解に対するもの）
+  oppHistory: Entry[];
   oppTurns: number;
   outcome: Outcome | null;
   mySecret: Code | null;
@@ -46,6 +48,7 @@ export class HbSession {
       myTurn: this.phase === 'playing' && this.match.turnOf() === this.me && !this.pendingGuess,
       waitingResult: this.pendingGuess !== null,
       myHistory: this.match.history(this.me),
+      oppHistory: this.match.history(this.opp),
       oppTurns: this.match.turns()[this.opp],
       outcome: this.match.outcome(),
       mySecret: this.secret,
