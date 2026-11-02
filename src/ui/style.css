@@ -1,0 +1,137 @@
+:root {
+  color-scheme: dark;
+  font-family: system-ui, 'Hiragino Sans', sans-serif;
+}
+body {
+  margin: 0;
+  background: #07041a;
+  color: #f5e9ff;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+}
+h1 {
+  font-size: 22px;
+  margin: 8px 0 12px;
+  color: #fff;
+  text-shadow: 0 0 8px #ff3fd2, 0 0 18px #ff3fd2;
+}
+#stage {
+  position: relative;
+}
+#canvas {
+  display: block;
+}
+#overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+#menu,
+#message {
+  pointer-events: auto;
+  background: rgba(16, 8, 48, 0.95);
+  border: 1px solid #ff3fd2;
+  box-shadow: 0 0 18px rgba(255, 63, 210, 0.5);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  text-align: center;
+  max-width: 420px;
+}
+#menu[hidden],
+#message[hidden] {
+  display: none;
+}
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+button {
+  font: inherit;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #4b5563;
+  background: #1f2937;
+  color: inherit;
+  cursor: pointer;
+}
+button:hover {
+  background: #374151;
+}
+input.url {
+  width: 100%;
+  font: inherit;
+  padding: 6px;
+  background: #030712;
+  color: inherit;
+  border: 1px solid #4b5563;
+  border-radius: 6px;
+}
+.help {
+  color: #9ca3af;
+  font-size: 13px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ---- トップ・選択画面 ---- */
+.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-width: 320px;
+  max-width: 560px;
+  padding: 20px 24px;
+  background: rgba(16, 8, 48, 0.95);
+  border: 1px solid #ff3fd2;
+  border-radius: 12px;
+  box-shadow: 0 0 18px rgba(255, 63, 210, 0.5);
+}
+.panel h2 {
+  margin: 0;
+  font-size: 20px;
+}
+.game-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border: 1px solid #4b5563;
+  border-radius: 10px;
+  background: rgba(3, 7, 18, 0.6);
+}
+.card h3 {
+  margin: 0;
+  font-size: 16px;
+}
+.card .sub,
+.panel .status {
+  color: #c4b5fd;
+  font-size: 13px;
+}
+.card .row {
+  flex-wrap: wrap;
+}
+
+/* ヨットは点数表が広いので、ヒットアンドブロー用の #app の幅を使わない */
+#app.yacht-app {
+  width: auto;
+}

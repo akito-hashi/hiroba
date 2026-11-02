@@ -1,0 +1,133 @@
+#app {
+  background: rgba(16, 8, 48, 0.95);
+  border: 1px solid #ff3fd2;
+  box-shadow: 0 0 18px rgba(255, 63, 210, 0.5);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+  max-width: calc(100vw - 32px);
+}
+a {
+  color: #93c5fd;
+}
+.status {
+  font-weight: bold;
+}
+.sub {
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+/* レイアウトA: 左にサイコロ、右に全員の得点表 */
+.board {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  min-width: 260px;
+}
+.dice-area {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+.die {
+  font-size: 44px;
+  line-height: 1;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  background: #f5e9ff;
+  color: #07041a;
+  border: 3px solid transparent;
+}
+.die:hover:not(:disabled) {
+  background: #fff;
+}
+.die.held {
+  border-color: #ff3fd2;
+  box-shadow: 0 0 10px #ff3fd2;
+  transform: translateY(-4px);
+}
+.die.blank {
+  background: #1f2937;
+  color: #4b5563;
+}
+.die:disabled {
+  opacity: 1;
+}
+
+.sheet {
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  font-size: 14px;
+}
+.sheet th,
+.sheet td {
+  border: 1px solid #374151;
+  padding: 3px 10px;
+  min-width: 3.5em;
+}
+.sheet tr > th:first-child {
+  text-align: left;
+  font-weight: normal;
+  color: #d1d5db;
+}
+.sheet th.turn {
+  color: #ff3fd2;
+}
+.sheet th.away::after {
+  content: '（不在）';
+  color: #9ca3af;
+  font-size: 11px;
+}
+.sheet th.removed {
+  text-decoration: line-through;
+  color: #6b7280;
+}
+.sheet td.option {
+  color: #9ca3af;
+  opacity: 0.7;
+  cursor: pointer;
+}
+.sheet td.option:hover {
+  opacity: 1;
+  color: #fff;
+  background: rgba(255, 63, 210, 0.3);
+}
+.sheet .subtotal td,
+.sheet .subtotal th {
+  font-size: 12px;
+}
+.sheet .total {
+  font-weight: bold;
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  min-width: 220px;
+}
+.results li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.results .score {
+  font-variant-numeric: tabular-nums;
+}

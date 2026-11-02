@@ -1,0 +1,254 @@
+/* ルドー: 木目の机の上に、クリーム色の盤と青い枠 */
+.ludo-app {
+  /* 中身から幅を見積もらせると盤と横の欄が並びきらないので、幅を決めておく（狭い画面では縦に回り込む） */
+  box-sizing: border-box;
+  width: min(100%, 740px);
+  border-radius: 14px;
+  padding: 20px;
+  background:
+    repeating-linear-gradient(92deg, rgba(120, 72, 30, 0.08) 0 2px, transparent 2px 9px),
+    repeating-linear-gradient(88deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 23px),
+    linear-gradient(180deg, #e9b47a, #d89a5c);
+  box-shadow:
+    0 0 0 1px #b97a41,
+    0 10px 30px rgba(0, 0, 0, 0.45);
+  color: #3a2410;
+}
+.ludo-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+}
+.ludo-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: min(190px, 100%);
+}
+.ludo-board {
+  position: relative;
+  width: min(460px, calc(100vw - 72px));
+  aspect-ratio: 1;
+  border: 9px solid #3f6fa8;
+  border-radius: 10px;
+  background: #f7f0d8;
+  box-shadow:
+    inset 0 0 0 2px #2c5687,
+    0 8px 18px rgba(60, 30, 0, 0.45);
+}
+.ludo-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.ludo-svg .base {
+  stroke: rgba(0, 0, 0, 0.15);
+  stroke-width: 0.6;
+}
+.ludo-svg .hole {
+  fill: #f7f0d8;
+  stroke: rgba(0, 0, 0, 0.25);
+  stroke-width: 0.5;
+}
+.ludo-svg .path {
+  fill: none;
+  stroke: #4a4036;
+  stroke-width: 0.5;
+}
+.ludo-svg .spot {
+  fill: #fffaf0;
+  stroke: #4a4036;
+  stroke-width: 0.5;
+}
+.ludo-svg .spot.entry {
+  stroke-width: 0.9;
+}
+.ludo-svg .lane {
+  stroke: #4a4036;
+  stroke-width: 0.5;
+}
+
+/* コマ（ピンの形）。位置は盤に対する割合で置き、足元をマスの中心に合わせる */
+.ludo-pieces {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.ludo-piece {
+  position: absolute;
+  width: 7%;
+  height: 11%;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  transform: translate(-50%, -78%);
+  pointer-events: auto;
+  filter: drop-shadow(2px 3px 1.5px rgba(0, 0, 0, 0.35));
+}
+/* 共通のボタンの見た目（hover の背景・枠・影）を打ち消す */
+.ludo-board .ludo-piece,
+.ludo-board .ludo-piece:hover:not(:disabled) {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+.ludo-piece:disabled {
+  opacity: 1;
+  cursor: default;
+}
+.pawn {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.pawn-head {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 58%;
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.85), transparent 40%), var(--pawn);
+  box-shadow: inset -2px -3px 4px rgba(0, 0, 0, 0.3);
+}
+.pawn-body {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 92%;
+  height: 72%;
+  transform: translateX(-50%);
+  border-radius: 50% 50% 45% 45% / 30% 30% 22% 22%;
+  clip-path: polygon(34% 0, 66% 0, 100% 100%, 0 100%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.35), transparent 45%, rgba(0, 0, 0, 0.25)), var(--pawn);
+}
+@keyframes pawn-hop {
+  0%, 100% { transform: translate(-50%, -78%); }
+  50% { transform: translate(-50%, -96%); }
+}
+.ludo-piece.movable {
+  cursor: pointer;
+  z-index: 2;
+  animation: pawn-hop 0.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px #fff) drop-shadow(0 0 8px #ff3fd2);
+}
+.ludo-piece .count {
+  position: absolute;
+  right: -30%;
+  top: -10%;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 2px;
+  border-radius: 7px;
+  background: #3a2410;
+  color: #fff;
+  font-size: 10px;
+  line-height: 14px;
+}
+
+/* サイコロ */
+.ludo-die {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: 80px;
+  height: 80px;
+  padding: 11px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #ffffff, #ececec);
+  box-shadow:
+    inset -4px -5px 0 rgba(0, 0, 0, 0.1),
+    6px 10px 14px rgba(60, 30, 0, 0.45);
+}
+.ludo-die.blank {
+  background: rgba(255, 250, 240, 0.45);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.6);
+}
+.ludo-die .pip {
+  border-radius: 50%;
+  margin: 3px;
+}
+.ludo-die .pip.on {
+  background: radial-gradient(circle at 35% 35%, #444, #000);
+}
+@keyframes ludo-roll {
+  0% { transform: rotate(0) scale(0.8); }
+  30% { transform: rotate(-20deg) scale(1.1); }
+  60% { transform: rotate(14deg) scale(0.95); }
+  100% { transform: rotate(0) scale(1); }
+}
+.ludo-die.rolling {
+  animation: ludo-roll 0.45s ease-out both;
+}
+
+/* 参加者の一覧 */
+.ludo-players {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+}
+.ludo-players li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(255, 250, 240, 0.75);
+  color: #3a2410;
+}
+.ludo-players li.turn {
+  outline: 2px solid #3f6fa8;
+  background: #fffaf0;
+}
+.ludo-players li.removed {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+.ludo-players .pawn {
+  width: 14px;
+  height: 22px;
+}
+.ludo-players .name {
+  flex: 1;
+  text-align: left;
+  font-weight: bold;
+}
+.ludo-players .goal {
+  color: #7a5a3a;
+  font-size: 12px;
+}
+.ludo-app .turn-banner {
+  color: #3a2410;
+  background: rgba(255, 250, 240, 0.85);
+  border-color: #3f6fa8;
+}
+.ludo-app .turn-banner.mine {
+  color: #fff;
+  background: #3f6fa8;
+  box-shadow: 0 0 10px rgba(63, 111, 168, 0.6);
+}
+.ludo-app .sub {
+  color: #5a3a1c;
+}
+.ludo-app .results li {
+  background: rgba(255, 250, 240, 0.75);
+  color: #3a2410;
+}
+
+@media (max-width: 600px) {
+  .ludo-app {
+    padding: 12px 8px;
+  }
+}

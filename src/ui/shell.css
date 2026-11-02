@@ -1,0 +1,714 @@
+/* 入口と広場まわり（トップ・名前・広場・卓）の見た目。theme.css の色の決まりを使う。 */
+:root {
+  font-family: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Hiragino Sans', system-ui, sans-serif;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --surface: rgba(22, 12, 58, 0.72);
+  --surface-strong: rgba(26, 14, 66, 0.95);
+  --ok: #3ddc84;
+  --warn: #ffb347;
+}
+
+/* キーボードで選んでいるところがはっきり分かるように */
+:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+/* ---- ロゴの帯 ---- */
+.app-header {
+  display: flex;
+  justify-content: center;
+  padding: 18px 16px 6px;
+}
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #fff;
+  text-shadow:
+    0 0 10px rgba(255, 63, 210, 0.8),
+    0 0 24px rgba(255, 63, 210, 0.45);
+}
+/* 広場の地図記号のような、4つの点が囲む丸 */
+.logo-mark {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 3px solid var(--cyan);
+  box-shadow: 0 0 10px rgba(56, 225, 255, 0.7);
+}
+.logo-mark::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background: var(--pink);
+  box-shadow: 0 0 8px var(--pink);
+}
+main {
+  padding: 8px 16px 40px;
+}
+#root {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ---- 画面の入れ物 ---- */
+.screen {
+  width: min(1080px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.screen.center {
+  align-items: center;
+  padding-top: 12px;
+}
+.card-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px 24px;
+  border-radius: var(--radius);
+  background: var(--surface-strong);
+  border: 1px solid rgba(255, 63, 210, 0.55);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset,
+    0 18px 40px rgba(0, 0, 0, 0.45),
+    0 0 22px rgba(255, 63, 210, 0.25);
+}
+.card-panel h2,
+.card-panel h3 {
+  margin: 0;
+}
+.muted {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.section-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+/* ---- ボタンの追加の形 ---- */
+button.big {
+  padding: 13px 26px;
+  font-size: 17px;
+  border-radius: 14px;
+}
+button.outline {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+/* ---- チップ（短い札） ---- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.chip.tiny {
+  padding: 1px 8px;
+  font-size: 11px;
+}
+.chip.me {
+  color: #07041a;
+  background: var(--cyan);
+  border-color: var(--cyan);
+}
+.chip.open {
+  color: var(--ok);
+  border-color: rgba(61, 220, 132, 0.5);
+  background: rgba(61, 220, 132, 0.1);
+}
+.chip.open::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 6px var(--ok);
+}
+.chip.playing {
+  color: var(--warn);
+  border-color: rgba(255, 179, 71, 0.5);
+  background: rgba(255, 179, 71, 0.1);
+}
+
+/* ---- 丸いアイコン（名前の頭文字。色は --hue） ---- */
+.avatar {
+  --size: 36px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  font-weight: 800;
+  font-size: calc(var(--size) * 0.44);
+  color: #fff;
+  background: linear-gradient(145deg, hsl(var(--hue) 80% 62%), hsl(var(--hue) 70% 42%));
+  box-shadow:
+    inset 0 -3px 0 rgba(0, 0, 0, 0.22),
+    0 0 0 2px rgba(255, 255, 255, 0.12);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+.avatar.sm {
+  --size: 28px;
+}
+.avatar.lg {
+  --size: 64px;
+}
+.avatar.empty {
+  background: transparent;
+  box-shadow: none;
+  border: 2px dashed rgba(255, 255, 255, 0.25);
+}
+
+/* ---- トップ ---- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 34px 36px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 85% 20%, rgba(56, 225, 255, 0.28), transparent 45%),
+    radial-gradient(circle at 70% 90%, rgba(255, 63, 210, 0.3), transparent 50%),
+    linear-gradient(135deg, #1d0d4a, #120a33);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+}
+/* 右側に浮かぶ、ゲームの玉のような飾り */
+.hero::before,
+.hero::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero::before {
+  right: 60px;
+  top: 34px;
+  width: 92px;
+  height: 92px;
+  background: radial-gradient(circle at 32% 30%, #fff8, transparent 40%), #ff3fd2;
+  box-shadow: 0 0 40px rgba(255, 63, 210, 0.7);
+}
+.hero::after {
+  right: 170px;
+  top: 110px;
+  width: 54px;
+  height: 54px;
+  background: radial-gradient(circle at 32% 30%, #fff8, transparent 40%), #38e1ff;
+  box-shadow: 0 0 30px rgba(56, 225, 255, 0.7);
+}
+.hero-kicker {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cyan);
+}
+.hero-title {
+  margin: 0;
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 800;
+  line-height: 1.2;
+  color: #fff;
+}
+.hero-text {
+  margin: 0 0 6px;
+  max-width: 36em;
+  color: #d8ccf5;
+  line-height: 1.7;
+}
+
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
+}
+.picker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.picker-label {
+  font-size: 13px;
+  color: var(--muted);
+}
+/* よわい・ふつう・つよい の切り替え */
+.segmented {
+  display: inline-flex;
+  padding: 4px;
+  gap: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--line);
+}
+.segmented button.seg {
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 700;
+  box-shadow: none;
+}
+.segmented button.seg:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ink);
+  box-shadow: none;
+}
+.segmented button.seg.on,
+.segmented button.seg.on:hover:not(:disabled) {
+  color: #fff;
+  background: linear-gradient(180deg, #ff5fdc, #c21fa0);
+  box-shadow: 0 0 12px rgba(255, 63, 210, 0.5);
+}
+
+/* ゲームのタイル */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+.tile {
+  --accent: var(--pink);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at 15% 0%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 55%),
+    var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition:
+    transform 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+.tile:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 70%, transparent);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4), 0 0 18px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.tile-art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 112px;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 50% 60%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 65%),
+    rgba(7, 4, 26, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+/* 56px で描いた絵を、形を変えずに大きく見せる */
+.tile-art .icon {
+  transform: scale(1.45);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.tile-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.tile-body h3 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 800;
+}
+.tile-desc {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #cbbdf0;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+.tile-actions {
+  display: flex;
+  gap: 8px;
+}
+.tile-actions button.primary {
+  flex: 1;
+}
+.tile.soon {
+  opacity: 0.55;
+}
+
+/* ---- 名前の入力 ---- */
+.name-card {
+  width: min(420px, 100%);
+  align-items: center;
+  text-align: center;
+}
+.name-preview .avatar {
+  --size: 76px;
+  font-size: 34px;
+}
+.name-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  font: inherit;
+  font-size: 18px;
+  text-align: center;
+  color: var(--ink);
+  background: rgba(7, 4, 26, 0.7);
+  border: 2px solid var(--line);
+  border-radius: 12px;
+}
+.name-input:focus {
+  border-color: var(--pink);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 63, 210, 0.25);
+}
+.name-card button.big {
+  width: 100%;
+}
+
+/* ---- 広場 ---- */
+.page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.page-head h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+}
+.plaza-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 20px;
+  align-items: start;
+}
+.plaza-main,
+.plaza-side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.tables,
+.create {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.empty-note {
+  padding: 22px;
+  border-radius: var(--radius-sm);
+  border: 2px dashed rgba(255, 255, 255, 0.14);
+  color: var(--muted);
+  text-align: center;
+  font-size: 14px;
+}
+.table-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+.table-card {
+  --accent: var(--pink);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+.table-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.table-head .icon {
+  transform: scale(0.8);
+  margin: -6px;
+}
+.table-title {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.table-title h3,
+.table-title h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+}
+.seats-mini {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.create-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+}
+button.create-btn {
+  --accent: var(--pink);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  text-align: left;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+button.create-btn:hover:not(:disabled) {
+  background: var(--surface);
+  border-color: var(--accent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+button.create-btn .icon {
+  transform: scale(0.72);
+  margin: -8px;
+}
+.create-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.create-text strong {
+  font-size: 14px;
+}
+.create-text strong::before {
+  content: '＋ ';
+  color: var(--accent);
+}
+.invite-row {
+  display: flex;
+  gap: 8px;
+}
+.invite-row input.url {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+}
+.member-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.member-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.member-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+/* ---- 卓 ---- */
+.table-room {
+  --accent: var(--pink);
+  width: min(560px, 100%);
+  border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45), 0 0 22px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.table-room .table-title h2 {
+  font-size: 21px;
+}
+.seats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  gap: 10px;
+}
+.seat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 8px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  min-width: 0;
+}
+.seat.empty {
+  background: transparent;
+  border-style: dashed;
+}
+.seat-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+  font-size: 14px;
+}
+.seat-tags {
+  display: flex;
+  gap: 4px;
+  min-height: 18px;
+}
+.table-room .status {
+  margin: 4px 0 0;
+  text-align: center;
+  color: #d8ccf5;
+  font-weight: 700;
+}
+.table-room button.big {
+  align-self: center;
+  min-width: 200px;
+}
+.table-room button.ghost {
+  align-self: center;
+}
+
+/* ---- 古い panel（エラーや接続中の表示）も同じ雰囲気に ---- */
+.panel {
+  border-radius: var(--radius);
+  padding: 24px 28px;
+}
+
+/* ---- ゲーム画面の上の帯と入れ物 ---- */
+.game-bar {
+  width: min(1080px, 100%);
+}
+/* 中身から幅を見積もらせると、折り返しのある並び（ルドーの盤と横の欄など）が
+   狭く見積もられて回り込んでしまうので、横幅いっぱいを使う */
+.game {
+  width: 100%;
+}
+
+/* ---- ヒットアンドブロー: 枠と玉を大きく ---- */
+#app.hb-app {
+  width: min(520px, calc(100vw - 32px));
+  padding: 26px 28px;
+  border-radius: var(--radius);
+  gap: 16px;
+}
+.hb-app .ball {
+  width: 34px;
+  height: 34px;
+}
+.hb-app .slots .ball {
+  width: 46px;
+  height: 46px;
+}
+.hb-app .row {
+  gap: 10px;
+}
+.hb-app .history .ball {
+  width: 26px;
+  height: 26px;
+}
+
+/* ---- スマホ ---- */
+@media (max-width: 760px) {
+  .plaza-grid {
+    grid-template-columns: 1fr;
+  }
+  /* 招待といる人を先に見せる */
+  .plaza-side {
+    order: -1;
+  }
+}
+@media (max-width: 560px) {
+  main {
+    padding: 4px 12px 32px;
+  }
+  .hero {
+    padding: 26px 22px;
+  }
+  .hero::before {
+    right: -20px;
+    top: -20px;
+    width: 90px;
+    height: 90px;
+    opacity: 0.7;
+  }
+  .hero::after {
+    display: none;
+  }
+  .hero button.big {
+    width: 100%;
+  }
+  .tiles {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  /* スマホでは絵を左に小さく置いて、縦に短くする */
+  .tile {
+    display: grid;
+    grid-template-columns: 76px 1fr;
+    grid-template-areas:
+      'art body'
+      'actions actions';
+    gap: 12px 14px;
+    padding: 14px;
+  }
+  .tile-art {
+    grid-area: art;
+    height: 76px;
+  }
+  .tile-art .icon {
+    transform: scale(1);
+  }
+  .tile-body {
+    grid-area: body;
+  }
+  .tile-actions {
+    grid-area: actions;
+  }
+  .section-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .card-panel {
+    padding: 18px;
+  }
+}

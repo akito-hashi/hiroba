@@ -1,0 +1,74 @@
+#app {
+  background: rgba(17, 24, 39, 0.95);
+  border: 1px solid #374151;
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  text-align: center;
+  width: min(420px, calc(100vw - 32px));
+  box-sizing: border-box;
+}
+a {
+  color: #93c5fd;
+}
+.status {
+  font-weight: bold;
+}
+.sub {
+  color: #9ca3af;
+  font-size: 14px;
+}
+.ball {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  padding: 0;
+  box-sizing: border-box;
+}
+.ball.empty {
+  background: transparent;
+  border-style: dashed;
+}
+.hb-app .c0 { background-color: #ef4444; }
+.hb-app .c1 { background-color: #3b82f6; }
+.hb-app .c2 { background-color: #22c55e; }
+.hb-app .c3 { background-color: #eab308; }
+.hb-app .c4 { background-color: #a855f7; }
+.hb-app .c5 { background-color: #f97316; }
+.hb-app .c0:hover { background-color: #f87171; }
+.hb-app .c1:hover { background-color: #60a5fa; }
+.hb-app .c2:hover { background-color: #4ade80; }
+.hb-app .c3:hover { background-color: #facc15; }
+.hb-app .c4:hover { background-color: #c084fc; }
+.hb-app .c5:hover { background-color: #fb923c; }
+.slots .ball {
+  width: 36px;
+  height: 36px;
+}
+.history {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+.history .row {
+  justify-content: space-between;
+}
+.history .n {
+  color: #9ca3af;
+  width: 2em;
+  text-align: right;
+}
+.history .score {
+  font-variant-numeric: tabular-nums;
+  width: 6em;
+  text-align: right;
+}
+button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}

@@ -1,0 +1,317 @@
+/* トイベースボール: 盤の上に得点板・カウント・操作を重ねる */
+.bb-app {
+  width: min(900px, calc(100vw - 32px));
+}
+.bb-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  max-height: calc(100vh - 120px);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--pink, #ff3fd2);
+  box-shadow: 0 0 18px rgba(255, 63, 210, 0.45);
+  background: #0b0730;
+}
+.bb-canvas {
+  position: absolute;
+  inset: 0;
+}
+/* 盤の上の表示。ボタン以外はクリックを通す */
+.bb-hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: #f5e9ff;
+  font-weight: bold;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+.bb-hud button {
+  pointer-events: auto;
+}
+.bb-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* 上: イニングと役割 */
+.bb-top {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.bb-inning,
+.bb-role {
+  padding: 4px 12px;
+  border-radius: 8px;
+  background: rgba(16, 8, 48, 0.8);
+}
+.bb-role {
+  color: #38e1ff;
+}
+
+/* 左下: 得点板 */
+.bb-score {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(16, 8, 48, 0.85);
+  min-width: 140px;
+}
+.bb-score-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.bb-score-row.me .bb-score-name::after {
+  content: '（あなた）';
+  font-size: 11px;
+  color: #a99bc9;
+}
+.bb-score-row.batting .bb-score-name::before {
+  content: '▶ ';
+  color: #ffe81a;
+}
+.bb-score-runs {
+  font-size: 18px;
+}
+
+/* 右下: B・S・O のランプ */
+.bb-bso {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(16, 8, 48, 0.85);
+}
+.bb-lamps {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 20px;
+}
+.bb-lamp-label {
+  width: 14px;
+}
+.bb-lamp {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #2a1f52;
+}
+.bb-lamps-b .bb-lamp.on {
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+}
+.bb-lamps-s .bb-lamp.on {
+  background: #eab308;
+  box-shadow: 0 0 6px #eab308;
+}
+.bb-lamps-o .bb-lamp.on {
+  background: #ef4444;
+  box-shadow: 0 0 6px #ef4444;
+}
+
+/* 右の中ほど: 球種と操作の案内（下中央だと本塁の打者に重なるため） */
+.bb-pitch {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+}
+.bb-kinds {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.bb-kinds button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: 13px;
+}
+.bb-kinds button.selected {
+  border-color: #ff3fd2;
+  box-shadow: 0 0 10px rgba(255, 63, 210, 0.7);
+}
+.bb-pitch .keys {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  margin-top: 0;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(16, 8, 48, 0.7);
+}
+
+/* 結果の大きな表示 */
+.bb-result {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 44px;
+  color: #ffe81a;
+  -webkit-text-stroke: 1px #1a0b3d;
+  text-shadow: 0 0 16px rgba(255, 63, 210, 0.8);
+  white-space: nowrap;
+}
+.bb-result-homer {
+  font-size: 56px;
+  color: #ff3fd2;
+}
+
+/* 試合終了 */
+.bb-end {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 28px;
+  border-radius: 12px;
+  background: rgba(16, 8, 48, 0.92);
+  border: 1px solid #ff3fd2;
+  font-size: 20px;
+}
+
+/* 広場の卓のアイコン: 緑の扇形・白い球・茶色のバット */
+.icon.icon-baseball span:nth-child(1) {
+  left: 8px;
+  top: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 0;
+  background: conic-gradient(from -45deg at 50% 100%, #3fae5a 0 90deg, transparent 90deg);
+}
+.icon.icon-baseball span:nth-child(2) {
+  left: 23px;
+  top: 30px;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  box-shadow: inset -2px -2px 3px rgba(0, 0, 0, 0.3);
+}
+.icon.icon-baseball span:nth-child(3) {
+  left: 30px;
+  top: 38px;
+  width: 20px;
+  height: 5px;
+  border-radius: 3px;
+  background: #b7793f;
+  transform: rotate(-30deg);
+}
+
+/* 得点の演出（紙吹雪と「◯点！」）。HUD の上に重ね、操作は邪魔しない */
+.bb-fx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.bb-score-fx {
+  position: absolute;
+  inset: 0;
+}
+.bb-confetti {
+  position: absolute;
+  top: -12px;
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  opacity: 0;
+  animation: bb-confetti-fall 1.6s ease-in forwards;
+}
+@keyframes bb-confetti-fall {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg);
+  }
+  100% {
+    opacity: 0.9;
+    transform: translate(var(--drift), 105vh) rotate(var(--spin));
+  }
+}
+.bb-score-pop {
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  animation: bb-score-pop 2s ease-out forwards;
+}
+.bb-score-pop-runs {
+  font-size: 64px;
+  font-weight: bold;
+  color: #ffe81a;
+  -webkit-text-stroke: 2px #1a0b3d;
+  text-shadow: 0 0 20px rgba(255, 63, 210, 0.9);
+}
+.bb-score-pop-who {
+  font-size: 18px;
+  font-weight: bold;
+  color: #f5e9ff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+@keyframes bb-score-pop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+  25% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -60%) scale(1);
+  }
+}
+/* 点が入った側の得点板の行を光らせる */
+.bb-score-row.scored .bb-score-runs {
+  color: #ffe81a;
+  animation: bb-score-flash 0.5s ease-in-out 4 alternate;
+}
+@keyframes bb-score-flash {
+  from {
+    text-shadow: 0 0 0 transparent;
+  }
+  to {
+    text-shadow: 0 0 12px #ffe81a, 0 0 24px #ff3fd2;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bb-confetti {
+    display: none;
+  }
+  .bb-score-pop,
+  .bb-score-row.scored .bb-score-runs {
+    animation: none;
+  }
+}

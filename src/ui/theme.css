@@ -1,0 +1,413 @@
+/* 3つのゲーム共通のネオン調の見た目。各ゲームの CSS より後に読み込んで上書きする。 */
+:root {
+  --pink: #ff3fd2;
+  --cyan: #38e1ff;
+  --ink: #f5e9ff;
+  --muted: #a99bc9;
+  --panel: rgba(16, 8, 48, 0.95);
+  --line: #3b2a6b;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(255, 63, 210, 0.12), transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(56, 225, 255, 0.1), transparent 50%),
+    #07041a;
+  min-height: 100vh;
+}
+
+/* ---- ボタン ---- */
+button {
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, #24184d, #170f36);
+  color: var(--ink);
+  border-radius: 10px;
+  transition:
+    box-shadow 0.15s,
+    border-color 0.15s,
+    transform 0.05s;
+}
+button:hover:not(:disabled) {
+  background: linear-gradient(180deg, #2e1f60, #1d1344);
+  border-color: var(--cyan);
+  box-shadow: 0 0 10px rgba(56, 225, 255, 0.45);
+}
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+button.primary {
+  background: linear-gradient(180deg, #ff5fdc, #c21fa0);
+  border-color: #ff8ae6;
+  color: #fff;
+  font-weight: bold;
+  box-shadow: 0 0 14px rgba(255, 63, 210, 0.5);
+}
+button.primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, #ff7ae3, #d22aae);
+  border-color: #fff;
+  box-shadow: 0 0 20px rgba(255, 63, 210, 0.8);
+}
+button.ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--muted);
+}
+button.ghost:hover:not(:disabled) {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: none;
+}
+button:disabled {
+  opacity: 0.35;
+}
+
+/* ---- ゲーム画面の上の帯 ---- */
+.game-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(900px, calc(100vw - 32px));
+  margin-bottom: 12px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--line);
+}
+.game-title {
+  font-weight: bold;
+  font-size: 17px;
+  flex: 1;
+  text-align: center;
+  text-shadow: 0 0 8px rgba(255, 63, 210, 0.7);
+}
+.badge {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 8px rgba(56, 225, 255, 0.35);
+  white-space: nowrap;
+}
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ---- トップ・選択画面のカード ---- */
+.card {
+  border-color: var(--line);
+  background: rgba(10, 5, 32, 0.7);
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+.card:hover {
+  border-color: var(--pink);
+  box-shadow: 0 0 12px rgba(255, 63, 210, 0.3);
+}
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.card .row {
+  margin-top: 4px;
+}
+.icon {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: #0b0730;
+  border: 1px solid var(--line);
+  position: relative;
+}
+.icon span {
+  position: absolute;
+  border-radius: 50%;
+}
+/* シックス: 三角に積んだ3つのボール */
+.icon-six span {
+  width: 18px;
+  height: 18px;
+  box-shadow: inset -3px -3px 4px rgba(0, 0, 0, 0.35);
+}
+.icon-six span:nth-child(1) { left: 9px; top: 28px; background: #e0102a; }
+.icon-six span:nth-child(2) { left: 29px; top: 28px; background: #1d5cff; }
+.icon-six span:nth-child(3) { left: 19px; top: 11px; background: #ffe81a; }
+/* ヨット: サイコロの5の目 */
+.icon-yacht {
+  background: var(--ink);
+}
+.icon-yacht span {
+  width: 9px;
+  height: 9px;
+  background: #1a0b3d;
+}
+.icon-yacht span:nth-child(1) { left: 10px; top: 10px; }
+.icon-yacht span:nth-child(2) { right: 10px; top: 10px; }
+.icon-yacht span:nth-child(3) { left: 23.5px; top: 23.5px; }
+.icon-yacht span:nth-child(4) { left: 10px; bottom: 10px; }
+.icon-yacht span:nth-child(5) { right: 10px; bottom: 10px; }
+/* ヒットアンドブロー: 4色の玉 */
+.icon-hb span {
+  width: 12px;
+  height: 12px;
+  top: 22px;
+}
+.icon-hb span:nth-child(1) { left: 4px; background: #ef4444; }
+.icon-hb span:nth-child(2) { left: 17px; background: #3b82f6; }
+.icon-hb span:nth-child(3) { left: 30px; background: #22c55e; }
+.icon-hb span:nth-child(4) { left: 43px; background: #eab308; }
+
+/* ---- シックス: 操作説明 ---- */
+.keys {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.key-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+kbd {
+  display: inline-block;
+  min-width: 22px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  border: 1px solid #5b4a8f;
+  border-bottom-width: 3px;
+  background: #1a1040;
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* ---- ヒットアンドブロー ---- */
+#app.hb-app {
+  background: var(--panel);
+  border-color: var(--pink);
+  box-shadow: 0 0 18px rgba(255, 63, 210, 0.45);
+}
+.hb-app .status {
+  font-size: 17px;
+}
+/* 玉に光沢 */
+.hb-app .ball,
+.icon-hb span {
+  background-image: radial-gradient(circle at 32% 30%, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0) 45%);
+  box-shadow: inset -3px -4px 6px rgba(0, 0, 0, 0.35);
+}
+.hb-app .ball:not(.empty) {
+  border-color: rgba(0, 0, 0, 0.5);
+}
+.hb-app button.ball:hover:not(:disabled) {
+  /* 共通のボタンの hover のグラデーションで玉の色が隠れないよう、光沢に戻す */
+  background-image: radial-gradient(circle at 32% 30%, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0) 45%);
+  border-color: rgba(0, 0, 0, 0.5);
+  transform: scale(1.12);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+.hb-app .slots .ball.empty {
+  border-color: #5b4a8f;
+}
+.hb-app .history .row {
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.hb-app .history .row:last-child {
+  outline: 1px solid rgba(56, 225, 255, 0.4);
+}
+.hb-app .history .score {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: auto;
+}
+.pegs {
+  display: inline-grid;
+  grid-template-columns: repeat(2, 10px);
+  gap: 3px;
+}
+.peg {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid #5b4a8f;
+}
+.peg.hit {
+  background: var(--pink);
+  border-color: var(--pink);
+  box-shadow: 0 0 6px var(--pink);
+}
+.peg.blow {
+  background: #fff;
+  border-color: #fff;
+}
+.score-text {
+  color: var(--muted);
+  font-size: 12px;
+  width: 3.6em;
+  text-align: left;
+}
+
+/* ---- ヨット ---- */
+.turn-banner {
+  font-weight: bold;
+  padding: 4px 16px;
+  border-radius: 999px;
+  color: var(--muted);
+  border: 1px solid var(--line);
+}
+.turn-banner.mine {
+  color: #fff;
+  border-color: var(--pink);
+  box-shadow: 0 0 12px rgba(255, 63, 210, 0.55);
+}
+.yacht-app .die {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  padding: 7px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #ffffff, #e6dcf5);
+  border: 3px solid transparent;
+  box-shadow:
+    inset -3px -4px 0 rgba(0, 0, 0, 0.12),
+    0 4px 0 #8a7bb0;
+}
+.yacht-app .die:hover:not(:disabled) {
+  background: linear-gradient(145deg, #ffffff, #f1eafc);
+  box-shadow:
+    inset -3px -4px 0 rgba(0, 0, 0, 0.12),
+    0 4px 0 #8a7bb0,
+    0 0 12px rgba(56, 225, 255, 0.6);
+}
+.yacht-app .die:disabled {
+  opacity: 1;
+}
+.yacht-app .die.blank {
+  background: #1a1040;
+  box-shadow: inset 0 0 0 1px #3b2a6b;
+}
+.yacht-app .die.held {
+  border-color: var(--pink);
+  transform: translateY(-8px);
+  box-shadow:
+    0 0 14px var(--pink),
+    0 4px 0 #8a1f74;
+}
+.pips {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: 100%;
+  height: 100%;
+  gap: 2px;
+}
+.pip {
+  border-radius: 50%;
+  margin: 2px;
+}
+.pip.on {
+  background: radial-gradient(circle at 35% 35%, #4a3a7a, #120a2e);
+}
+.keep {
+  position: absolute;
+  left: 50%;
+  bottom: -20px;
+  transform: translateX(-50%);
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+  color: var(--pink);
+}
+.yacht-app .dice {
+  gap: 10px;
+  padding: 8px 0 14px;
+}
+@keyframes die-roll {
+  0% { transform: rotate(0) scale(0.8); }
+  30% { transform: rotate(-18deg) scale(1.08); }
+  60% { transform: rotate(12deg) scale(0.96); }
+  100% { transform: rotate(0) scale(1); }
+}
+.yacht-app .die.rolling {
+  animation: die-roll 0.42s ease-out both;
+}
+button.roll {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+}
+.roll-dots {
+  display: inline-flex;
+  gap: 4px;
+}
+.roll-dots .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+.roll-dots .dot.on {
+  background: #fff;
+}
+.yacht-app .sheet {
+  font-size: 14px;
+}
+.yacht-app .sheet th,
+.yacht-app .sheet td {
+  border-color: var(--line);
+  padding: 4px 12px;
+}
+.yacht-app .sheet td.filled {
+  color: var(--ink);
+}
+.yacht-app .sheet td.option {
+  color: var(--cyan);
+  opacity: 0.85;
+  font-weight: bold;
+}
+.yacht-app .sheet td.option.zero {
+  color: var(--muted);
+  font-weight: normal;
+  opacity: 0.6;
+}
+.yacht-app .sheet td.option.best {
+  color: #fff;
+  opacity: 1;
+  background: rgba(255, 63, 210, 0.25);
+  box-shadow: inset 0 0 0 1px var(--pink);
+}
+.yacht-app .sheet .total td,
+.yacht-app .sheet .total th {
+  font-size: 16px;
+  color: #fff;
+  border-top: 2px solid var(--pink);
+}
+.yacht-app .results li {
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ルドー: 4色のコマを四隅に */
+.icon-ludo span {
+  width: 16px;
+  height: 16px;
+  box-shadow: inset -3px -3px 4px rgba(0, 0, 0, 0.35);
+}
+.icon-ludo span:nth-child(1) { left: 9px; top: 9px; background: #ef4444; }
+.icon-ludo span:nth-child(2) { right: 9px; top: 9px; background: #3b82f6; }
+.icon-ludo span:nth-child(3) { right: 9px; bottom: 9px; background: #facc15; }
+.icon-ludo span:nth-child(4) { left: 9px; bottom: 9px; background: #22c55e; }
