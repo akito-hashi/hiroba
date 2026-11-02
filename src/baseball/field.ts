@@ -72,9 +72,12 @@ export type Cup = { x: number; y: number; r: number };
 // 守備人形の受け皿。内野2人（二塁手・遊撃手）は土の内野の中、
 // 外野3人（左翼・中堅・右翼）は壁の手前。投手は投球マシンなので守らない。
 // 一塁手・三塁手は置かず、線寄りの打球をヒットにしやすくしている。
+// 内野2人は、フェアゾーンの右半分・左半分それぞれの真ん中（センターから左右 22.5°）、本塁から 38 の位置
+const INFIELD_ANGLE = Math.PI / 8;
+const INFIELD_DIST = 38;
 export const CUPS: Cup[] = [
-  { x: 12, y: 40, r: 4 },
-  { x: -12, y: 40, r: 4 },
+  { x: INFIELD_DIST * Math.sin(INFIELD_ANGLE), y: INFIELD_DIST * Math.cos(INFIELD_ANGLE), r: 4 },
+  { x: -INFIELD_DIST * Math.sin(INFIELD_ANGLE), y: INFIELD_DIST * Math.cos(INFIELD_ANGLE), r: 4 },
   { x: -45, y: 75, r: 4 },
   { x: 0, y: 88, r: 4 },
   { x: 45, y: 75, r: 4 },

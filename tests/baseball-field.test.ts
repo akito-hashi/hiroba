@@ -125,6 +125,14 @@ describe('盤', () => {
     expect(WALL_SEGMENTS).toEqual(['triple', 'double', 'single', 'homer', 'single', 'double', 'triple']);
   });
 
+  it('内野の2人は、フェアゾーンの右半分・左半分それぞれの真ん中（センターから左右22.5°）に左右対称に立つ', () => {
+    const infield = CUPS.filter((c) => Math.hypot(c.x, c.y) < INFIELD_R);
+    const angles = infield.map((c) => (Math.atan2(c.x, c.y) * 180) / Math.PI).sort((a, b) => a - b);
+    expect(angles[0]).toBeCloseTo(-22.5, 1);
+    expect(angles[1]).toBeCloseTo(22.5, 1);
+    expect(infield[0].y).toBeCloseTo(infield[1].y, 5);
+  });
+
   it('受け皿は内野に2つ、外野に3つ（投手は投球マシンなので守らない）', () => {
     const dist = (c: { x: number; y: number }) => Math.hypot(c.x, c.y);
     expect(CUPS.filter((c) => dist(c) < INFIELD_R)).toHaveLength(2);
