@@ -5,6 +5,7 @@ import './baseball/style.css';
 import './ludo/style.css';
 import './ui/theme.css';
 import './ui/shell.css';
+import './ui/cafe.css';
 import { baseballGame } from './games/baseball';
 import { hitBlowGame } from './games/hitblow';
 import { ludoGame } from './games/ludo';
@@ -111,13 +112,13 @@ function gameIcon(id: GameId) {
   return icon;
 }
 
-// ゲームごとの差し色（タイルの光や枠に使う）
+// ゲームごとの差し色（ゲームの箱のふたの帯や枠に使う）
 const ACCENTS: Record<GameId, string> = {
-  six: '#ff3fd2',
-  yacht: '#38e1ff',
-  hb: '#ffb347',
-  ludo: '#3ddc84',
-  baseball: '#7aa7ff',
+  six: '#c8513a',
+  yacht: '#2f6f73',
+  hb: '#d9a13b',
+  ludo: '#3f6fa8',
+  baseball: '#3f8f4f',
 };
 
 // 名前の頭文字が入った丸いアイコン。広場の名前は重ならない（同じ名前には番号が付く）ので、

@@ -1,0 +1,482 @@
+/* ボードゲームカフェの見た目。木目の机の上に、クリーム色の紙のカードやゲームの箱を置いた世界。
+   色の決まり（変数）を置き換えて、theme.css・shell.css・各ゲームの CSS の上から最後にかぶせる。
+   シックスボールパズルの盤の中（ネオン）と、トイベースボールの球場の中は、ゲーム機の画面として残す。 */
+:root {
+  color-scheme: light;
+  /* 色の決まり。名前は前のまま使い、中身をカフェの色にする */
+  --pink: #c8513a; /* 主な差し色: レンガ赤 */
+  --cyan: #2f6f73; /* 2つ目の差し色: 深い青緑 */
+  --ink: #3a2410; /* 文字: こげ茶 */
+  --muted: #8a6a4a;
+  --line: #dcc69c;
+  --panel: #fbf4e2;
+  --surface: #fbf4e2;
+  --surface-strong: #fbf4e2;
+  --ok: #2f7d4f;
+  --warn: #b5761c;
+  --paper: #fbf4e2;
+  --paper-2: #f3e6c6;
+  --paper-edge: #c9a26b;
+  --wood-ink: #fffaf0; /* 木の上に直接置く文字 */
+}
+
+/* ---- 机（画面全体の背景） ---- */
+body {
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 240, 210, 0.35), transparent 60%),
+    radial-gradient(ellipse at 50% 120%, rgba(60, 30, 0, 0.35), transparent 60%),
+    repeating-linear-gradient(92deg, rgba(120, 72, 30, 0.09) 0 2px, transparent 2px 11px),
+    repeating-linear-gradient(88deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 27px),
+    linear-gradient(180deg, #d9a46c, #c48a52);
+  background-attachment: fixed;
+}
+
+/* ---- ロゴ: 木に焼き付けたような文字と、ゲームの駒のしるし ---- */
+.logo {
+  color: var(--wood-ink);
+  text-shadow:
+    0 2px 0 #8a5a2b,
+    0 4px 10px rgba(60, 30, 0, 0.35);
+}
+.logo-mark {
+  border: 3px solid var(--wood-ink);
+  background: var(--paper);
+  box-shadow: 0 2px 0 #8a5a2b;
+}
+.logo-mark::after {
+  background: var(--pink);
+  box-shadow: none;
+}
+
+/* ---- ボタン: 押すと沈む立体 ---- */
+button {
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--paper-edge);
+  border-radius: 12px;
+  box-shadow: 0 3px 0 var(--paper-edge);
+  font-weight: 700;
+}
+button:hover:not(:disabled) {
+  background: #fffaf0;
+  border-color: var(--paper-edge);
+  box-shadow: 0 3px 0 var(--paper-edge);
+}
+button:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--paper-edge);
+}
+button.primary,
+button.primary:hover:not(:disabled) {
+  color: #fff;
+  background: var(--pink);
+  border-color: #9c3a26;
+  box-shadow: 0 4px 0 #8c3424;
+}
+button.primary:hover:not(:disabled) {
+  background: #d65c44;
+}
+button.primary:active:not(:disabled) {
+  box-shadow: 0 1px 0 #8c3424;
+}
+button.ghost,
+button.ghost:hover:not(:disabled) {
+  color: var(--muted);
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+button.ghost:hover:not(:disabled) {
+  color: var(--ink);
+  background: rgba(60, 30, 0, 0.06);
+}
+button.outline {
+  background: transparent;
+  border-color: var(--paper-edge);
+}
+/* 木の上に直接置く「戻る」「広場を出る」は明るい文字 */
+.game-bar button.ghost,
+.page-head button.ghost {
+  color: var(--wood-ink);
+  text-shadow: 0 1px 0 #8a5a2b;
+}
+.game-bar button.ghost:hover:not(:disabled),
+.page-head button.ghost:hover:not(:disabled) {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+:focus-visible {
+  outline-color: var(--cyan);
+}
+
+/* ---- 紙のカード（机の上に置いた紙やゲームの箱） ---- */
+.card-panel,
+.panel,
+.tile,
+.table-card,
+button.create-btn,
+.hero,
+#message,
+#app.hb-app,
+#app.yacht-app {
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid #e6d3a8;
+  box-shadow:
+    0 4px 0 var(--paper-edge),
+    0 12px 22px rgba(60, 30, 0, 0.28);
+}
+.panel .status,
+.card .sub,
+.muted,
+.sub {
+  color: var(--muted);
+}
+
+/* ---- ゲーム画面の上の帯（木の上） ---- */
+.game-bar {
+  border-bottom-color: rgba(255, 250, 240, 0.35);
+}
+.game-title {
+  color: var(--wood-ink);
+  text-shadow: 0 2px 0 #8a5a2b;
+}
+.badge {
+  color: var(--cyan);
+  background: var(--paper);
+  border-color: var(--paper);
+  box-shadow: 0 2px 0 var(--paper-edge);
+}
+
+/* ---- 小さな札・丸いアイコン ---- */
+.chip {
+  color: var(--ink);
+  background: var(--paper-2);
+  border-color: #e0cda4;
+}
+.chip.me {
+  color: #fff;
+  background: var(--cyan);
+  border-color: var(--cyan);
+}
+.chip.open {
+  color: var(--ok);
+  background: rgba(47, 125, 79, 0.1);
+  border-color: rgba(47, 125, 79, 0.45);
+}
+.chip.open::before {
+  background: var(--ok);
+  box-shadow: none;
+}
+.chip.playing {
+  color: var(--warn);
+  background: rgba(181, 118, 28, 0.1);
+  border-color: rgba(181, 118, 28, 0.45);
+}
+.avatar {
+  box-shadow:
+    inset 0 -3px 0 rgba(0, 0, 0, 0.18),
+    0 0 0 2px #fffaf0;
+}
+.avatar.empty {
+  border-color: var(--paper-edge);
+}
+/* ゲームの絵は、暗い四角ではなく紙の上の白い札に */
+.icon {
+  background: #fffaf0;
+  border-color: #e0cda4;
+}
+
+/* ---- トップ ---- */
+.hero {
+  background: var(--paper);
+}
+/* ネオンの玉のかわりに、机に転がった木の玉（赤と青緑） */
+.hero::before {
+  background: radial-gradient(circle at 32% 30%, rgba(255, 255, 255, 0.55), transparent 42%), var(--pink);
+  box-shadow:
+    inset -6px -8px 14px rgba(0, 0, 0, 0.2),
+    0 8px 14px rgba(60, 30, 0, 0.3);
+}
+.hero::after {
+  background: radial-gradient(circle at 32% 30%, rgba(255, 255, 255, 0.55), transparent 42%), var(--cyan);
+  box-shadow:
+    inset -4px -6px 10px rgba(0, 0, 0, 0.2),
+    0 6px 10px rgba(60, 30, 0, 0.3);
+}
+.hero-kicker {
+  color: var(--pink);
+}
+.hero-title {
+  color: var(--ink);
+}
+.hero-text {
+  color: #6b4a2b;
+}
+/* 木の上に直接置く見出し */
+.section-head .section-title,
+.tables > .section-title,
+.create > .section-title,
+.page-head h2 {
+  color: var(--wood-ink);
+  text-shadow: 0 2px 0 #8a5a2b;
+}
+.picker-label {
+  color: var(--wood-ink);
+  text-shadow: 0 1px 0 #8a5a2b;
+}
+.segmented {
+  background: var(--paper);
+  border-color: var(--paper);
+  box-shadow: 0 3px 0 var(--paper-edge);
+}
+.segmented button.seg {
+  color: var(--muted);
+  border: none;
+  box-shadow: none;
+}
+.segmented button.seg:hover:not(:disabled) {
+  color: var(--ink);
+  background: var(--paper-2);
+  box-shadow: none;
+}
+.segmented button.seg.on,
+.segmented button.seg.on:hover:not(:disabled) {
+  color: #fff;
+  background: var(--cyan);
+  box-shadow: none;
+}
+/* ゲームのタイルは、上に色の帯が付いたゲームの箱のふた */
+.tile {
+  border-top: 10px solid var(--accent);
+  background: var(--paper);
+}
+.tile:hover {
+  border-color: #e6d3a8;
+  border-top-color: var(--accent);
+  box-shadow:
+    0 4px 0 var(--paper-edge),
+    0 16px 26px rgba(60, 30, 0, 0.32);
+}
+.tile-art {
+  background: var(--paper-2);
+  border-color: #e6d3a8;
+}
+.tile-art .icon {
+  box-shadow: 0 4px 0 #e0cda4;
+}
+.tile-desc {
+  color: #6b4a2b;
+}
+
+/* ---- 名前の入力・入力欄 ---- */
+.name-input,
+input.url {
+  color: var(--ink);
+  background: #fffdf6;
+  border: 2px solid var(--line);
+}
+.name-input:focus {
+  border-color: var(--pink);
+  box-shadow: 0 0 0 3px rgba(200, 81, 58, 0.2);
+}
+
+/* ---- 広場・卓 ---- */
+.empty-note {
+  color: var(--wood-ink);
+  border-color: rgba(255, 250, 240, 0.5);
+  text-shadow: 0 1px 0 #8a5a2b;
+}
+.table-card {
+  border-top: 8px solid var(--accent);
+}
+button.create-btn {
+  border-left: 8px solid var(--accent);
+}
+button.create-btn:hover:not(:disabled) {
+  background: #fffaf0;
+  border-color: #e6d3a8;
+  border-left-color: var(--accent);
+  box-shadow:
+    0 4px 0 var(--paper-edge),
+    0 12px 22px rgba(60, 30, 0, 0.28);
+}
+.table-room {
+  border-top: 10px solid var(--accent);
+}
+.seat {
+  background: var(--paper-2);
+  border-color: #e6d3a8;
+}
+.seat.empty {
+  background: transparent;
+  border-color: var(--paper-edge);
+}
+.table-room .status {
+  color: #6b4a2b;
+}
+
+/* ---- シックスボールパズル: 盤のまわりを携帯ゲーム機の黒い縁で囲む ---- */
+#stage {
+  padding: 16px;
+  border-radius: 26px;
+  background: linear-gradient(180deg, #2a2440, #17132a);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.08),
+    0 6px 0 #0c0a18,
+    0 18px 30px rgba(60, 30, 0, 0.4);
+}
+#message {
+  border-color: #e6d3a8;
+}
+.keys {
+  color: var(--wood-ink);
+  text-shadow: 0 1px 0 #8a5a2b;
+}
+kbd {
+  color: var(--ink);
+  background: var(--paper);
+  border-color: var(--paper-edge);
+  text-shadow: none;
+}
+
+/* ---- ヨット: サイコロは緑のフェルトの台、点数表は紙の記録用紙 ---- */
+.yacht-app .side {
+  padding: 16px;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.08), transparent 60%),
+    #2f6f4f;
+  box-shadow:
+    inset 0 0 0 4px #7a4a22,
+    inset 0 6px 18px rgba(0, 0, 0, 0.35);
+  color: #f2fff6;
+}
+.yacht-app .side .sub {
+  color: #cfe9d8;
+}
+.turn-banner {
+  color: var(--ink);
+  background: var(--paper);
+  border-color: var(--paper);
+}
+.turn-banner.mine {
+  color: #fff;
+  background: var(--pink);
+  border-color: var(--pink);
+  box-shadow: 0 3px 0 #8c3424;
+}
+.yacht-app .die.held {
+  border-color: #ffd23f;
+  box-shadow:
+    0 0 0 3px rgba(255, 210, 63, 0.5),
+    0 4px 0 #8a7bb0;
+}
+.keep {
+  color: #ffd23f;
+}
+.yacht-app .sheet th,
+.yacht-app .sheet td {
+  border-color: var(--line);
+}
+.yacht-app .sheet tr > th:first-child {
+  color: #6b4a2b;
+}
+.yacht-app .sheet th.turn {
+  color: var(--pink);
+}
+.yacht-app .sheet td.filled {
+  color: var(--ink);
+}
+.yacht-app .sheet td.option {
+  color: var(--cyan);
+}
+.yacht-app .sheet td.option:hover {
+  color: #fff;
+  background: var(--cyan);
+}
+.yacht-app .sheet td.option.zero {
+  color: #b8a080;
+}
+.yacht-app .sheet td.option.best {
+  color: #fff;
+  background: var(--pink);
+  box-shadow: none;
+}
+.yacht-app .sheet .total td,
+.yacht-app .sheet .total th {
+  color: var(--ink);
+  border-top-color: var(--pink);
+}
+.yacht-app .results li {
+  background: var(--paper-2);
+}
+
+/* ---- ヒットアンドブロー: 紙のカードに、木のペグボードのような記録 ---- */
+.hb-app .status {
+  color: var(--ink);
+}
+.hb-board {
+  background: var(--paper-2);
+  border-color: #e0cda4;
+}
+.hb-board.active {
+  border-color: var(--pink);
+  box-shadow: 0 0 0 2px rgba(200, 81, 58, 0.25);
+}
+.hb-board.active h3::after {
+  color: var(--pink);
+}
+.hb-target {
+  background: rgba(47, 111, 115, 0.1);
+}
+.hb-app .history .row {
+  background:
+    radial-gradient(circle, rgba(122, 74, 34, 0.18) 1.2px, transparent 1.4px) 0 0 / 10px 10px,
+    #e9c99a;
+}
+.hb-app .history .row:last-child {
+  outline-color: var(--pink);
+}
+.hb-app .slots .ball.empty {
+  border-color: var(--paper-edge);
+}
+.peg {
+  border-color: #a07850;
+  background: #fffaf0;
+}
+.peg.hit {
+  background: var(--pink);
+  border-color: #8c3424;
+  box-shadow: none;
+}
+.peg.blow {
+  background: #fff;
+  border-color: #3a2410;
+}
+.score-text {
+  color: #6b4a2b;
+}
+.hb-app .history .n {
+  color: #6b4a2b;
+  font-weight: 700;
+}
+/* 「卓を作る」はゲーム名が1行に収まる幅にする */
+.create-grid {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+/* ---- ルドー: 机はもう木なので、ルドー独自の木の枠は外して盤を直接置く ---- */
+.ludo-app {
+  background: transparent;
+  box-shadow: none;
+  padding: 8px 0;
+}
+
+/* ---- トイベースボール: 球場の外枠のピンクの光だけ、木の机になじむ影にする ---- */
+.bb-stage {
+  box-shadow:
+    0 4px 0 #8a5a2b,
+    0 16px 28px rgba(60, 30, 0, 0.35);
+}
